@@ -1,8 +1,14 @@
 const Post = require('../models').Post;
+const { validationResult } = require('express-validator/check');
 
 module.exports = {
     create(req, res){
-        return Post.create({
+            const errors = validationResult(req);
+            console.log(errors);
+            if(!errors.isEmpty()){
+                res.status(422).json({errors:errors.array()});  
+            }  
+        Post.create({
             title:req.body.title,
         }).then(post => res.status(200).send(post))
         .catch(error => res.status(400).send(error));
