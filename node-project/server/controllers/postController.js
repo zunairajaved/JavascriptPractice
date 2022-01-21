@@ -32,30 +32,26 @@ module.exports = {
         .catch((err) => next(err));
     },
     postUpdate(req,res,next){
-        Post.findByPk(req.params.postId, {
-        })
+        Post.update( {
+            title:req.body.title
+        },{where:
+        {
+            id:req.params.postId
+        }},{new:true})
         .then((post) => {
-            post.update({
-                title:req.body.title,
-            },{new:true}).then((nPost)=>{
                 res.statusCode = 200;
                 res.setHeader('Content-Type', 'application/json');
-                res.json(nPost);
-            },(err)=>next(err))
-            .catch((err)=>next(err));
+                res.json(post);
         }, (err) => next(err))
         .catch((err) => next(err));
     },
     postDelete(req,res,next){
-        Post.findByPk(req.params.postId, {
+        Post.destroy({where:{id:req.params.postId}}, {
         })
         .then((post) => {
-            post.destroy().then((resp)=>{
                 res.statusCode = 200;
                 res.setHeader('Content-Type', 'application/json');
                 res.json('Post deleted succesfully');
-            },(err)=>next(err))
-            .catch((err)=>next(err));
         }, (err) => next(err))
         .catch((err) => next(err));
     }
